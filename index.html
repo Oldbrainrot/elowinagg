@@ -6,8 +6,7 @@
 </head>
 <body>
 
-<button onclick="startChaos()">START CHAOS</button>
-<button onclick="stopChaos()">STOP</button>
+<button onclick="startChaos()">START</button>
 
 <script>
 let chaosWindows = [];
@@ -16,7 +15,7 @@ let chaosInterval;
 function startChaos() {
   if (chaosWindows.length > 0) return;
 
-  const count = 30;
+  const count = 50;
   const w = 160;
   const h = 100;
 
@@ -46,25 +45,19 @@ function startChaos() {
         `);
         chaosWindows.push(win);
       }
-    }, i * 50);
+    }, i * 10);
   }
 
   chaosInterval = setInterval(() => {
     chaosWindows.forEach(win => {
       if (!win.closed) {
         win.moveTo(
-          Math.random() * screen.width,
-          Math.random() * screen.height
+          Math.random() * (screen.width - w),
+          Math.random() * (screen.height - h)
         );
       }
     });
-  }, 50);
-}
-
-function stopChaos() {
-  clearInterval(chaosInterval);
-  chaosWindows.forEach(win => !win.closed && win.close());
-  chaosWindows = [];
+  }, 400);
 }
 </script>
 
