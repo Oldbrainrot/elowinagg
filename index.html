@@ -1,21 +1,3 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
-<title>Latające okienka</title>
-</head>
-<body style="background:black; color:lime; font-family:monospace; text-align:center; padding-top:50px;">
-
-<h1>🧠 TEST LATAJĄCYCH OKIEN 🧠</h1>
-<p>Kliknij przycisk, aby uruchomić chaos:</p>
-
-<button onclick="startChaos()">START SKACZĄCYCH OKIEN</button>
-<button onclick="stopChaos()">STOP</button>
-
-<script>
-let chaosWindows = [];
-let chaosInterval = null;
-
 function startChaos() {
   if (chaosWindows.length > 0) return;
 
@@ -24,30 +6,32 @@ function startChaos() {
   const h = 100;
 
   for (let i = 0; i < count; i++) {
-    const x = Math.random() * (screen.width - w);
-    const y = Math.random() * (screen.height - h);
+    setTimeout(() => { // <-- ważne, żeby każdy timeout był w kliknięciu
+      const x = Math.random() * (screen.width - w);
+      const y = Math.random() * (screen.height - h);
 
-    const win = window.open(
-      "",
-      "",
-      `width=${w},height=${h},left=${x},top=${y}`
-    );
+      const win = window.open(
+        "",
+        "",
+        `width=${w},height=${h},left=${x},top=${y}`
+      );
 
-    if (win) {
-      win.document.write(`
-        <body style="
-          margin:0;
-          background:black;
-          color:lime;
-          font-family:monospace;
-          display:flex;
-          align-items:center;
-          justify-content:center;">
-          🧠 BRAINROT ${i+1}
-        </body>
-      `);
-      chaosWindows.push(win);
-    }
+      if (win) {
+        win.document.write(`
+          <body style="
+            margin:0;
+            background:black;
+            color:lime;
+            font-family:monospace;
+            display:flex;
+            align-items:center;
+            justify-content:center;">
+            🧠 BRAINROT ${i+1}
+          </body>
+        `);
+        chaosWindows.push(win);
+      }
+    }, i * 100); // każde okno opóźnione o 100ms
   }
 
   chaosInterval = setInterval(() => {
@@ -60,13 +44,3 @@ function startChaos() {
     });
   }, 400);
 }
-
-function stopChaos() {
-  clearInterval(chaosInterval);
-  chaosWindows.forEach(win => { if (!win.closed) win.close(); });
-  chaosWindows = [];
-}
-</script>
-
-</body>
-</html>
