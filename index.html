@@ -1,125 +1,20 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
-<title>⚠️ UWAGA! BRAINROT</title>
-
-<style>
-body {
-  background: black;
-  color: red;
-  font-family: monospace;
-  text-align: center;
-  padding-top: 30px;
-}
-
-#box {
-  border: 3px solid red;
-  padding: 20px;
-  width: 85%;
-  margin: auto;
-}
-
-#log {
-  text-align: left;
-  margin-top: 20px;
-  height: 200px;
-  overflow-y: auto;
-  border-top: 1px solid red;
-  padding-top: 10px;
-}
-
-button {
-  margin-top: 20px;
-  padding: 10px 25px;
-  font-size: 18px;
-  cursor: pointer;
-  background: black;
-  color: red;
-  border: 2px solid red;
-}
-
-button:hover {
-  background: red;
-  color: black;
-}
-
-/* LEVEL 2 – BSOD */
-#overlay {
-  position: fixed;
-  inset: 0;
-  background: black;
-  color: #00aaff;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  z-index: 9999;
-}
-
-#bsod {
-  max-width: 800px;
-  text-align: left;
-}
-
-/* LEVEL 3 – FAKE BIOS */
-#bios {
-  position: fixed;
-  inset: 0;
-  background: black;
-  color: #9cff9c;
-  display: none;
-  font-size: 18px;
-  padding: 30px;
-  text-align: left;
-  z-index: 10000;
-}
-
-.bios-line { margin: 6px 0; }
-</style>
-</head>
-
-<body>
-
-<div id="box">
-  <h1>⚠️ WYKRYTO BRAINROTA ⚠️</h1>
-  <p>Status: <span id="status">Skanowanie systemu...</span></p>
-  <p>Postęp: <span id="count">0%</span></p>
-
-  <div id="log"></div>
-
-  <button id="fixBtn" onclick="handleClick()">Napraw komputer</button>
-</div>
-
-<!-- LEVEL 2 OVERLAY -->
-<div id="overlay">
-  <div id="bsod">
-    <h1>:(</h1>
-    <p>System napotkał krytyczny błąd BRAINROT_EXCEPTION</p>
-    <p>Zbieranie informacji...</p>
-    <p id="bsodPercent">0%</p>
-    <p id="restart"></p>
-  </div>
-</div>
-
-<!-- LEVEL 3 BIOS -->
-<div id="bios"></div>
-
-<!-- DŹWIĘK -->
-<audio id="beep">
-  <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=">
-</audio>
-
 <script>
+/* ====== STAN ====== */
 let percent = 0;
 let stage = 0;
 let clicks = 0;
 let allowNextClick = false;
 
+/* CHAOS WINDOWS */
+let chaosWindows = [];
+let chaosInterval = null;
+
+/* ELEMENTY */
 const log = document.getElementById("log");
 const statusText = document.getElementById("status");
 const beep = document.getElementById("beep");
 
+/* ====== SKAN ====== */
 const messages = [
   "Analizowanie folderu: memes/",
   "Wykryto plik: skibidi.mp4",
@@ -152,19 +47,16 @@ const loading = setInterval(() => {
   }
 }, 120);
 
+/* ====== KLIK ====== */
 function handleClick() {
   clicks++;
 
-  if (clicks === 1) {
-    levelOne();
-  } else if (clicks === 2) {
-    levelTwo();
-  } else if (clicks === 3 && allowNextClick) {
-    levelThree();
-  }
+  if (clicks === 1) levelOne();
+  else if (clicks === 2) levelTwo();
+  else if (clicks === 3 && allowNextClick) levelThree();
 }
 
-/* LEVEL 1 */
+/* ====== LEVEL 1 ====== */
 function levelOne() {
   clearInterval(loading);
   statusText.innerText = "Częściowo naprawiono";
@@ -172,45 +64,35 @@ function levelOne() {
   addLog("Zalecane ponowne kliknięcie.");
 }
 
-/* LEVEL 2 – BSOD */
+/* ====== LEVEL 2 – BSOD ====== */
 function levelTwo() {
-  document.getElementById("overlay").style.display = "flex";
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "flex";
 
   let p = 0;
   const percentText = document.getElementById("bsodPercent");
   const restartText = document.getElementById("restart");
 
   const bsodLoad = setInterval(() => {
-    if (p < 100) {
-      p++;
-      percentText.innerText = p + "%";
-    } else {
+    percentText.innerText = p + "%";
+    if (++p >= 100) {
       clearInterval(bsodLoad);
-      startRestart();
+      let r = 5;
+      const timer = setInterval(() => {
+        restartText.innerText = "Restart za " + r + "...";
+        if (--r < 0) {
+          clearInterval(timer);
+          overlay.style.display = "none";
+          allowNextClick = true;
+          statusText.innerText = "Tryb BIOS wykryty";
+          addLog("Kliknij jeszcze raz, aby kontynuować.");
+        }
+      }, 1000);
     }
   }, 60);
-
-  function startRestart() {
-    let r = 5;
-    restartText.innerText = "Restart za " + r + "...";
-
-    const timer = setInterval(() => {
-      r--;
-      restartText.innerText = "Restart za " + r + "...";
-
-      if (r === 0) {
-        clearInterval(timer);
-        document.getElementById("overlay").style.display = "none";
-        allowNextClick = true;
-        statusText.innerText = "Uruchamianie środowiska niskiego poziomu…";
-        addLog("Uwaga: wykryto tryb BIOS.");
-        addLog("Kliknij jeszcze raz, aby kontynuować.");
-      }
-    }, 1000);
-  }
 }
 
-/* LEVEL 3 – FAKE BIOS */
+/* ====== LEVEL 3 – BIOS ====== */
 function levelThree() {
   const bios = document.getElementById("bios");
   bios.style.display = "block";
@@ -218,58 +100,97 @@ function levelThree() {
 
   const lines = [
     "BRAINROT BIOS v6.66",
-    "Copyright (C) 1984-2025",
-    "",
     "CPU: Human Brain @ overclocked",
-    "RAM: 2GB (1.9GB used by memes)",
+    "RAM: 2GB (1.9GB memes)",
     "Checking storage...",
     "WARNING: Skibidi sector corrupted",
     "Loading neural drivers...",
-    "Press DEL to enter setup",
-    "",
-    "POST STATUS:"
+    "POST OK"
   ];
 
   let i = 0;
   const post = setInterval(() => {
-    if (i < lines.length) {
-      const div = document.createElement("div");
-      div.className = "bios-line";
-      div.textContent = lines[i];
-      bios.appendChild(div);
-      i++;
-    } else {
+    const div = document.createElement("div");
+    div.textContent = lines[i++];
+    bios.appendChild(div);
+    if (i >= lines.length) {
       clearInterval(post);
-      biosFinish();
+      setTimeout(finalReveal, 2000);
     }
-  }, 350);
+  }, 400);
+}
 
-  function biosFinish() {
-    setTimeout(() => {
-      document.body.innerHTML = `
-        <div style="
+/* ====== FINAŁ + CHAOS ====== */
+function finalReveal() {
+  document.body.innerHTML = `
+    <div style="
+      background:black;
+      color:lime;
+      font-family:monospace;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;">
+      <h1>😂 ULTRA PRANK 😂</h1>
+      <p>Nie klika się tylko raz.</p>
+      <button onclick="startChaos()">TRYB CHAOSU</button>
+      <button onclick="stopChaos()">STOP</button>
+    </div>
+  `;
+}
+
+/* ====== CHAOS – 10 OKIEN ====== */
+function startChaos() {
+  if (chaosWindows.length > 0) return;
+
+  const count = 10;
+  const w = 160;
+  const h = 100;
+
+  for (let i = 0; i < count; i++) {
+    const x = Math.random() * (screen.width - w);
+    const y = Math.random() * (screen.height - h);
+
+    const win = window.open(
+      "",
+      "",
+      `width=${w},height=${h},left=${x},top=${y}`
+    );
+
+    if (win) {
+      win.document.write(`
+        <body style="
+          margin:0;
           background:black;
           color:lime;
           font-family:monospace;
-          height:100vh;
           display:flex;
-          flex-direction:column;
-          justify-content:center;
           align-items:center;
-          text-align:center;">
-          <h1>😂 ULTRA PRANK 😂</h1>
-          <p>To był FAKE BIOS.</p>
-          <p>Widzisz? Nie klika się tylko raz 😉</p>
-          <p style="color:gray;margin-top:20px;">
-            Komputer jest bezpieczny.<br>
-            Brainrot? To już inna sprawa 😏
-          </p>
-        </div>
-      `;
-    }, 2000);
+          justify-content:center;">
+          🧠 BRAINROT
+        </body>
+      `);
+      chaosWindows.push(win);
+    }
   }
+
+  chaosInterval = setInterval(() => {
+    chaosWindows.forEach(win => {
+      if (!win.closed) {
+        win.moveTo(
+          Math.random() * (screen.width - w),
+          Math.random() * (screen.height - h)
+        );
+      }
+    });
+  }, 400);
+}
+
+function stopChaos() {
+  clearInterval(chaosInterval);
+  chaosWindows.forEach(w => !w.closed && w.close());
+  chaosWindows = [];
 }
 </script>
-
-</body>
-</html>
