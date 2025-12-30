@@ -1,149 +1,9 @@
 <script>
-/* ====== STAN ====== */
-let percent = 0;
-let stage = 0;
-let clicks = 0;
-let allowNextClick = false;
-
-/* CHAOS WINDOWS */
 let chaosWindows = [];
 let chaosInterval = null;
 
-/* ELEMENTY */
-const log = document.getElementById("log");
-const statusText = document.getElementById("status");
-const beep = document.getElementById("beep");
-
-/* ====== SKAN ====== */
-const messages = [
-  "Analizowanie folderu: memes/",
-  "Wykryto plik: skibidi.mp4",
-  "Wykryto plik: brainrot.exe",
-  "Błąd: za dużo shortów",
-  "Stabilizowanie neuronów...",
-  "To nie wygląda dobrze..."
-];
-
-function addLog(text) {
-  const p = document.createElement("p");
-  p.textContent = "> " + text;
-  log.appendChild(p);
-  log.scrollTop = log.scrollHeight;
-}
-
-const loading = setInterval(() => {
-  if (percent < 100) {
-    percent++;
-    document.getElementById("count").innerText = percent + "%";
-
-    if (percent % 15 === 0 && stage < messages.length) {
-      addLog(messages[stage]);
-      beep.currentTime = 0;
-      beep.play();
-      stage++;
-    }
-
-    if (percent > 70) statusText.innerText = "Stan krytyczny";
-  }
-}, 120);
-
-/* ====== KLIK ====== */
-function handleClick() {
-  clicks++;
-
-  if (clicks === 1) levelOne();
-  else if (clicks === 2) levelTwo();
-  else if (clicks === 3 && allowNextClick) levelThree();
-}
-
-/* ====== LEVEL 1 ====== */
-function levelOne() {
-  clearInterval(loading);
-  statusText.innerText = "Częściowo naprawiono";
-  addLog("Naprawa zakończona… chyba.");
-  addLog("Zalecane ponowne kliknięcie.");
-}
-
-/* ====== LEVEL 2 – BSOD ====== */
-function levelTwo() {
-  const overlay = document.getElementById("overlay");
-  overlay.style.display = "flex";
-
-  let p = 0;
-  const percentText = document.getElementById("bsodPercent");
-  const restartText = document.getElementById("restart");
-
-  const bsodLoad = setInterval(() => {
-    percentText.innerText = p + "%";
-    if (++p >= 100) {
-      clearInterval(bsodLoad);
-      let r = 5;
-      const timer = setInterval(() => {
-        restartText.innerText = "Restart za " + r + "...";
-        if (--r < 0) {
-          clearInterval(timer);
-          overlay.style.display = "none";
-          allowNextClick = true;
-          statusText.innerText = "Tryb BIOS wykryty";
-          addLog("Kliknij jeszcze raz, aby kontynuować.");
-        }
-      }, 1000);
-    }
-  }, 60);
-}
-
-/* ====== LEVEL 3 – BIOS ====== */
-function levelThree() {
-  const bios = document.getElementById("bios");
-  bios.style.display = "block";
-  bios.innerHTML = "";
-
-  const lines = [
-    "BRAINROT BIOS v6.66",
-    "CPU: Human Brain @ overclocked",
-    "RAM: 2GB (1.9GB memes)",
-    "Checking storage...",
-    "WARNING: Skibidi sector corrupted",
-    "Loading neural drivers...",
-    "POST OK"
-  ];
-
-  let i = 0;
-  const post = setInterval(() => {
-    const div = document.createElement("div");
-    div.textContent = lines[i++];
-    bios.appendChild(div);
-    if (i >= lines.length) {
-      clearInterval(post);
-      setTimeout(finalReveal, 2000);
-    }
-  }, 400);
-}
-
-/* ====== FINAŁ + CHAOS ====== */
-function finalReveal() {
-  document.body.innerHTML = `
-    <div style="
-      background:black;
-      color:lime;
-      font-family:monospace;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;">
-      <h1>😂 ULTRA PRANK 😂</h1>
-      <p>Nie klika się tylko raz.</p>
-      <button onclick="startChaos()">TRYB CHAOSU</button>
-      <button onclick="stopChaos()">STOP</button>
-    </div>
-  `;
-}
-
-/* ====== CHAOS – 10 OKIEN ====== */
 function startChaos() {
-  if (chaosWindows.length > 0) return;
+  if (chaosWindows.length > 0) return; // zabezpieczenie
 
   const count = 10;
   const w = 160;
@@ -169,20 +29,20 @@ function startChaos() {
           display:flex;
           align-items:center;
           justify-content:center;">
-          🧠 BRAINROT
+          🧠 BRAINROT ${i+1}
         </body>
       `);
       chaosWindows.push(win);
     }
   }
 
+  // animacja skakania okienek
   chaosInterval = setInterval(() => {
     chaosWindows.forEach(win => {
       if (!win.closed) {
-        win.moveTo(
-          Math.random() * (screen.width - w),
-          Math.random() * (screen.height - h)
-        );
+        const newX = Math.random() * (screen.width - w);
+        const newY = Math.random() * (screen.height - h);
+        win.moveTo(newX, newY);
       }
     });
   }, 400);
@@ -190,7 +50,10 @@ function startChaos() {
 
 function stopChaos() {
   clearInterval(chaosInterval);
-  chaosWindows.forEach(w => !w.closed && w.close());
+  chaosWindows.forEach(win => { if (!win.closed) win.close(); });
   chaosWindows = [];
 }
 </script>
+
+<button onclick="startChaos()">START SKACZĄCYCH OKIEN</button>
+<button onclick="stopChaos()">STOP<
