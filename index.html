@@ -1,12 +1,12 @@
 function startChaos() {
   if (chaosWindows.length > 0) return;
 
-  const count = 10;
+  const count = 50; // teraz 50 okien
   const w = 160;
   const h = 100;
 
   for (let i = 0; i < count; i++) {
-    setTimeout(() => { // <-- ważne, żeby każdy timeout był w kliknięciu
+    setTimeout(() => {
       const x = Math.random() * (screen.width - w);
       const y = Math.random() * (screen.height - h);
 
@@ -31,7 +31,7 @@ function startChaos() {
         `);
         chaosWindows.push(win);
       }
-    }, i * 100); // każde okno opóźnione o 100ms
+    }, i * 100);
   }
 
   chaosInterval = setInterval(() => {
