@@ -1,23 +1,23 @@
 function startChaos() {
   if (chaosWindows.length > 0) return;
 
-  const count = 50; // teraz 50 okien
+  const count = 50;
   const w = 160;
   const h = 100;
 
   for (let i = 0; i < count; i++) {
-    setTimeout(() => {
+    setTimeout(() => { // <-- ważne, żeby każdy timeout był w kliknięciu
       const x = Math.random() * (screen.width - w);
       const y = Math.random() * (screen.height - h);
 
       const win = window.open(
         "",
         "",
-        `width=${w},height=${h},left=${x},top=${y}`
+        width=${w},height=${h},left=${x},top=${y}
       );
 
       if (win) {
-        win.document.write(`
+        win.document.write(
           <body style="
             margin:0;
             background:black;
@@ -28,10 +28,10 @@ function startChaos() {
             justify-content:center;">
             🧠 BRAINROT ${i+1}
           </body>
-        `);
+        );
         chaosWindows.push(win);
       }
-    }, i * 100);
+    }, i * 10); // każde okno opóźnione o 10ms
   }
 
   chaosInterval = setInterval(() => {
@@ -44,3 +44,4 @@ function startChaos() {
     });
   }, 400);
 }
+      
