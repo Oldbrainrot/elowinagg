@@ -1,23 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Chaos</title>
+</head>
+<body>
+
+<button onclick="startChaos()">START CHAOS</button>
+<button onclick="stopChaos()">STOP</button>
+
+<script>
+let chaosWindows = [];
+let chaosInterval;
+
 function startChaos() {
   if (chaosWindows.length > 0) return;
 
-  const count = 50;
+  const count = 30;
   const w = 160;
   const h = 100;
 
   for (let i = 0; i < count; i++) {
-    setTimeout(() => { // <-- ważne, żeby każdy timeout był w kliknięciu
+    setTimeout(() => {
       const x = Math.random() * (screen.width - w);
       const y = Math.random() * (screen.height - h);
 
       const win = window.open(
         "",
         "",
-        width=${w},height=${h},left=${x},top=${y}
+        `width=${w},height=${h},left=${x},top=${y}`
       );
 
       if (win) {
-        win.document.write(
+        win.document.write(`
           <body style="
             margin:0;
             background:black;
@@ -26,22 +41,32 @@ function startChaos() {
             display:flex;
             align-items:center;
             justify-content:center;">
-            🧠 BRAINROT ${i+1}
+            🧠 BRAINROT ${i + 1}
           </body>
-        );
+        `);
         chaosWindows.push(win);
       }
-    }, i * 10); // każde okno opóźnione o 10ms
+    }, i * 50);
   }
 
   chaosInterval = setInterval(() => {
     chaosWindows.forEach(win => {
       if (!win.closed) {
-        const newX = Math.random() * (screen.width - w);
-        const newY = Math.random() * (screen.height - h);
-        win.moveTo(newX, newY);
+        win.moveTo(
+          Math.random() * screen.width,
+          Math.random() * screen.height
+        );
       }
     });
-  }, 400);
+  }, 50);
 }
-      startChaos();
+
+function stopChaos() {
+  clearInterval(chaosInterval);
+  chaosWindows.forEach(win => !win.closed && win.close());
+  chaosWindows = [];
+}
+</script>
+
+</body>
+</html>
