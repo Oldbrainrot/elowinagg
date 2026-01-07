@@ -31,7 +31,7 @@ trigger.addEventListener("click", () => {
   }, 800);
 
   // 📥 Pobieranie plików (działa TYLKO po kliknięciu)
-  downloadFile("media/prank.zip");
+  downloadFile("media/you.zip");
 });
 
 // Funkcja pobierania
