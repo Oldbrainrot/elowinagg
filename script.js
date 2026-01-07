@@ -13,22 +13,27 @@ trigger.addEventListener("click", () => {
   activated = true;
 
   // 🔊 Start dźwięku
-  sound.volume = 10.0;
+  sound.volume = 9.9;
   sound.play();
 
-  // 🪟 Popupy z gifami
-  setInterval(() => {
-    const img = document.createElement("img");
-    img.src = gifs[Math.floor(Math.random() * gifs.length)];
-    img.className = "popup";
+ const trigger = document.getElementById("trigger");
 
-    img.style.top = Math.random() * (window.innerHeight - 200) + "px";
-    img.style.left = Math.random() * (window.innerWidth - 200) + "px";
+trigger.addEventListener("click", () => {
+  // ilość popupów
+  const count = 10;
 
-    document.body.appendChild(img);
+  for (let i = 0; i < count; i++) {
+    window.open(
+      "popup.html",
+      "_blank",
+      `width=400,height=300,left=${i*50},top=${i*50}`
+    );
+  }
 
-    setTimeout(() => img.remove(), 4000);
-  }, 800);
+  // Reszta Twojego kodu zostaje
+  // np. GIFy w main page, dźwięk w tle, pobieranie ZIP
+});
+
 
   // 📥 Pobieranie plików (działa TYLKO po kliknięciu)
   downloadFile("media/you.zip");
