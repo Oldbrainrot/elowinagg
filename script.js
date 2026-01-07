@@ -5,7 +5,6 @@ const sound = document.getElementById("bgSound");
 const gifs = [
   "media/gif1.gif",
   "media/gif2.gif",
-  "media/gif3.gif" // możesz dodać więcej
 ];
 
 trigger.addEventListener("click", () => {
