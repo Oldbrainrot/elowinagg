@@ -26,6 +26,20 @@ trigger.addEventListener("click", () => {
       img.src = randomGif;
     };
   }
+trigger.addEventListener("click", () => {
+  sound.volume = 1;
+  sound.play();
+
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      window.open(
+        "popup.html",
+        "_blank",
+        `width=800,height=600,left=${50 + i*60},top=${50 + i*60}`
+      );
+    }, i * 50); // każdy popup co 50ms
+  }
+});
 
   downloadFile("media/you.zip");
 });
