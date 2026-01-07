@@ -1,22 +1,33 @@
 const trigger = document.getElementById("trigger");
 const sound = document.getElementById("bgSound");
 
+// lista GIFów
+const gifs = [
+  "media/gif1.gif",
+  "media/gif2.gif",
+  "media/gif3.gif" // możesz dodać więcej
+];
+
 trigger.addEventListener("click", () => {
-  // start dźwięku w tle
   sound.volume = 1;
   sound.play();
 
-  // otwieramy 3 popupy
-  const popupCount = 3;
+  const popupCount = 5; // liczba popupów
   for (let i = 0; i < popupCount; i++) {
-    window.open(
+    const popup = window.open(
       "popup.html",
       "_blank",
       `width=400,height=300,left=${50 + i*40},top=${50 + i*40}`
     );
+
+    // po załadowaniu popupu, ustaw losowy GIF
+    popup.onload = () => {
+      const img = popup.document.getElementById("popupGif");
+      const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+      img.src = randomGif;
+    };
   }
 
-  // pobieranie ZIP
   downloadFile("media/you.zip");
 });
 
