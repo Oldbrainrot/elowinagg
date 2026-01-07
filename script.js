@@ -1,46 +1,19 @@
 const trigger = document.getElementById("trigger");
 const sound = document.getElementById("bgSound");
 
-// lista GIFów
-const gifs = [
-  "media/gif1.gif",
-  "media/gif2.gif",
-];
-
 trigger.addEventListener("click", () => {
+  // start dźwięku w tle
   sound.volume = 1;
   sound.play();
 
-  const popupCount = 5; // liczba popupów
-  for (let i = 0; i < popupCount; i++) {
-    const popup = window.open(
-      "popup.html",
-      "_blank",
-      `width=400,height=300,left=${50 + i*40},top=${50 + i*40}`
-    );
+  // otwieramy 1 duży popup z wieloma GIFami
+  window.open(
+    "popup.html",
+    "_blank",
+    "width=1000,height=700,left=100,top=100"
+  );
 
-    // po załadowaniu popupu, ustaw losowy GIF
-    popup.onload = () => {
-      const img = popup.document.getElementById("popupGif");
-      const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-      img.src = randomGif;
-    };
-  }
-trigger.addEventListener("click", () => {
-  sound.volume = 1;
-  sound.play();
-
-  for (let i = 0; i < 5; i++) {
-    setTimeout(() => {
-      window.open(
-        "popup.html",
-        "_blank",
-        `width=800,height=600,left=${50 + i*60},top=${50 + i*60}`
-      );
-    }, i * 50); // każdy popup co 50ms
-  }
-});
-
+  // pobieranie ZIP
   downloadFile("media/you.zip");
 });
 
@@ -52,18 +25,4 @@ function downloadFile(file) {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-}
-const popupCount = 5;
-for (let i = 0; i < popupCount; i++) {
-  const popup = window.open(
-    "popup.html",
-    "_blank",
-    `width=800,height=600,left=${50 + i*60},top=${50 + i*60}`
-  );
-
-  popup.onload = () => {
-    const img = popup.document.getElementById("popupGif");
-    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-    img.src = randomGif;
-  };
 }
