@@ -39,3 +39,17 @@ function downloadFile(file) {
   a.click();
   document.body.removeChild(a);
 }
+const popupCount = 5;
+for (let i = 0; i < popupCount; i++) {
+  const popup = window.open(
+    "popup.html",
+    "_blank",
+    `width=800,height=600,left=${50 + i*60},top=${50 + i*60}`
+  );
+
+  popup.onload = () => {
+    const img = popup.document.getElementById("popupGif");
+    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+    img.src = randomGif;
+  };
+}
