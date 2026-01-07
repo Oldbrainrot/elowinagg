@@ -1,8 +1,13 @@
+const trigger = document.getElementById("trigger");
+const sound = document.getElementById("bgSound");
+
 trigger.addEventListener("click", () => {
+  // start dźwięku w tle
   sound.volume = 1;
   sound.play();
 
-  const popupCount = 4;
+  // otwieramy 3 popupy
+  const popupCount = 3;
   for (let i = 0; i < popupCount; i++) {
     window.open(
       "popup.html",
@@ -11,5 +16,16 @@ trigger.addEventListener("click", () => {
     );
   }
 
+  // pobieranie ZIP
   downloadFile("media/you.zip");
 });
+
+// funkcja pobierania
+function downloadFile(file) {
+  const a = document.createElement("a");
+  a.href = file;
+  a.download = "";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
