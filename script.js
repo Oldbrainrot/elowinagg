@@ -13,7 +13,7 @@ trigger.addEventListener("click", () => {
   activated = true;
 
   // 🔊 Start dźwięku
-  sound.volume = 0.7;
+  sound.volume = 10.0;
   sound.play();
 
   // 🪟 Popupy z gifami
